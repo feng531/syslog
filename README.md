@@ -34,3 +34,34 @@ sys.log. paths: com.test.service,com.test.service2
 ```
 sys.log. annotations: org.springframework.stereotype.Service
 ```
+
+## 6、自定义日志信息
+实现ICustomLog 接口，并将实现类作为bean注入即可
+```
+@Component
+public class DefaultCustomLog implements ICustomLog {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Override
+    public void before(MethodInvocation invocation) {
+        log.info("方法执行前");
+    }
+
+    @Override
+    public void logInfo(MethodInvocation invocation, Object res) {
+        log.info("自定义日志信息");
+    }
+
+    @Override
+    public void errLogInfo(MethodInvocation invocation, Exception e) {
+        log.error("方法执行异常时自定义日志信息");
+    }
+
+    @Override
+    public void after(MethodInvocation invocation, Object res) {
+        log.info("方法执行后，返回结果：{}", res);
+    }
+
+}
+```
